@@ -4,9 +4,11 @@ export const AuthDataContext = createContext()
 
 function AuthContext({ children }) {
   const [loading, setLoading] = useState(false)
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false)
   const serverUrl = import.meta.env.VITE_SERVER_URL
   const value = { serverUrl,
-    loading, setLoading
+    loading, setLoading,
+    showLoginPrompt, setShowLoginPrompt
    }
   return (
     <div>

@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, MapPin, Star, User } from 'lucide-react'
 import { UserDataContext } from '../Context/UserContext'
 import { ListingDataContext } from '../Context/ListingContext'
+import { AuthDataContext } from '../Context/AuthContext'
 
 function Card({ listing }) {
   const navigate = useNavigate()
   const { userData } = useContext(UserDataContext)
   const { handleViewCard } = useContext(ListingDataContext)
+  const { setShowLoginPrompt } = useContext(AuthDataContext)
   const images = [listing.image1, listing.image2, listing.image3].filter(Boolean)
   const [index, setIndex] = useState(0)
 
@@ -19,7 +21,7 @@ function Card({ listing }) {
       handleViewCard(listing._id)
       navigate(`/viewcard/${listing._id}`)
     } else {
-      navigate('/login')
+      setShowLoginPrompt(true)
     }
   }
 

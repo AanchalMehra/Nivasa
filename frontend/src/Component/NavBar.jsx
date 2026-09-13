@@ -21,7 +21,7 @@ const categories = [
 ]
 
 function NavBar() {
-  const { serverUrl } = useContext(AuthDataContext)
+  const { serverUrl, setShowLoginPrompt } = useContext(AuthDataContext)
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
@@ -68,10 +68,20 @@ function NavBar() {
     userData
       ? { label: 'Logout', action: handleLogout }
       : { label: 'Login', to: '/login' },
-    { label: 'List your home', to: '/listing-page-1' },
-    { label: 'My listings', to: '/my-listings' },
-    { label: 'My bookings', to: '/bookings' },
+    { label: 'List your home', to: '/listing-page-1', protected: true },
+    { label: 'My listings', to: '/my-listings', protected: true },
+    { label: 'My bookings', to: '/bookings', protected: true },
   ]
+
+  const handleProtectedNav = (e) => {
+    if (!userData) {
+      e.preventDefault()
+      setMenuOpen(false)
+      setShowLoginPrompt(true)
+    } else {
+      setMenuOpen(false)
+    }
+  }
 
   return (
     <nav className="w-full bg-[rgb(250,247,242)] border-b border-gray-200 shadow-sm px-4 sm:px-6 py-3">
@@ -96,6 +106,7 @@ function NavBar() {
         <div className="flex items-center gap-4 shrink-0">
           <Link
             to="/listing-page-1"
+            onClick={handleProtectedNav}
             className="hidden sm:inline text-sm font-medium text-gray-700 hover:text-orange-500"
           >
             List your home
@@ -134,7 +145,7 @@ function NavBar() {
                     ) : (
                       <Link
                         to={item.to}
-                        onClick={() => setMenuOpen(false)}
+                        onClick={item.protected ? handleProtectedNav : () => setMenuOpen(false)}
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500"
                       >
                         {item.label}
