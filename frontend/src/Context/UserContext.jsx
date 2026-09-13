@@ -32,6 +32,7 @@ function UserContext({children}) {
     userData,
     setUserData,
     loading,
+    getCurrentUserData,
  }
 
   return (

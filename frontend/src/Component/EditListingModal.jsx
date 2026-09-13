@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import { X, Home, Wheat, Waves, BedDouble, Building, Users, TreePine, Store } from 'lucide-react'
 import { AuthDataContext } from '../Context/AuthContext'
 import { ListingDataContext } from '../Context/ListingContext'
+import { UserDataContext } from '../Context/UserContext'
 
 const categories = [
   { label: 'Villa', icon: Home },
@@ -21,6 +22,7 @@ function EditListingModal({ listing, onClose }) {
   const navigate = useNavigate()
   const { serverUrl } = useContext(AuthDataContext)
   const { setViewCardData } = useContext(ListingDataContext)
+  const { getCurrentUserData } = useContext(UserDataContext)
 
   const [title, setTitle] = useState(listing.title)
   const [description, setDescription] = useState(listing.description)
@@ -70,6 +72,7 @@ function EditListingModal({ listing, onClose }) {
       toast.success('Listing updated successfully')
       onClose()
       navigate('/')
+      await getCurrentUserData()
     } catch (error) {
       console.error('Error updating listing:', error)
       toast.error(error.response?.data?.message || 'Failed to update listing')
@@ -88,6 +91,7 @@ function EditListingModal({ listing, onClose }) {
       toast.success('Listing deleted successfully')
       onClose()
       navigate('/')
+      await getCurrentUserData()
     } catch (error) {
       console.error('Error deleting listing:', error)
       toast.error(error.response?.data?.message || 'Failed to delete listing')

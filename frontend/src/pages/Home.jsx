@@ -1,19 +1,17 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import NavBar from '../Component/NavBar'
 import Card from '../Component/Card'
 import { ListingDataContext } from '../Context/ListingContext'
 
 function Home() {
-  const { listingData, getListing, activeCategory } = useContext(ListingDataContext)
+  const { searchData, activeCategory } = useContext(ListingDataContext)
 
-  useEffect(() => {
-    getListing()
-  }, [])
+  const validListings = searchData.filter((listing) => listing && listing._id)
 
   const visibleListings =
     !activeCategory || activeCategory === 'Trending'
-      ? listingData
-      : listingData.filter((listing) => listing.category === activeCategory)
+      ? validListings
+      : validListings.filter((listing) => listing.category === activeCategory)
 
   return (
     <div>

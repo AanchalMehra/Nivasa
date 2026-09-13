@@ -26,7 +26,12 @@ function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
   const { userData } = useContext(UserDataContext)
-  const { activeCategory, setActiveCategory } = useContext(ListingDataContext)
+  const { activeCategory, setActiveCategory, handleSearch } = useContext(ListingDataContext)
+  const [input, setInput] = useState('')
+
+  useEffect(() => {
+    handleSearch(input)
+  }, [input])
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -65,7 +70,7 @@ function NavBar() {
       : { label: 'Login', to: '/login' },
     { label: 'List your home', to: '/listing-page-1' },
     { label: 'My listings', to: '/my-listings' },
-    { label: 'Check Booking', to: '/bookings' },
+    { label: 'My bookings', to: '/bookings' },
   ]
 
   return (
@@ -80,6 +85,8 @@ function NavBar() {
             <Search className="w-4 h-4 text-orange-400 shrink-0" />
             <input
               type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Search destinations"
               className="w-full outline-none text-sm text-gray-900 placeholder:text-gray-400"
             />
@@ -147,6 +154,8 @@ function NavBar() {
           <Search className="w-4 h-4 text-orange-400 shrink-0" />
           <input
             type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Search destinations"
             className="w-full outline-none text-sm text-gray-900 placeholder:text-gray-400"
           />

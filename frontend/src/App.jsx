@@ -9,6 +9,8 @@ import ListingPage1 from './pages/ListingPage1'
 import ListingPage2 from './pages/ListingPage2'
 import ListingPage3 from './pages/ListingPage3'
 import MyListing from './pages/MyListing'
+import MyBookings from './pages/MyBookings'
+import BookingConfirmed from './pages/BookingConfirmed'
 import ViewCard from './pages/ViewCard'
 import { UserDataContext } from './Context/UserContext'
 
@@ -29,7 +31,9 @@ function App() {
       <Route path="/listing-page-2" element={userData ? <ListingPage2/> : <Navigate to="/login" />}/>
       <Route path="/listing-page-3" element={userData ? <ListingPage3/> : <Navigate to="/login" />}/>
       <Route path="/my-listings" element={userData ? <MyListing/> : <Navigate to="/login" />}/>
+      <Route path="/bookings" element={userData ? <MyBookings/> : <Navigate to="/login" />}/>
       <Route path="/viewcard/:id" element={userData ? <ViewCard/> : <Navigate to="/login" />}/>
+      <Route path="/booked" element={userData ? <BookingConfirmed/> : <Navigate to="/login" />}/>
 
 
     </Routes>

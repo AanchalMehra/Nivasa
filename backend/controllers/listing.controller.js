@@ -51,6 +51,29 @@ export const getListing = async (req, res) => {
     }
 };
 
+export const searchListing = async (req, res) => {
+    try {
+        const { query } = req.query;
+
+        if (!query?.trim()) {
+            const listings = await Listing.find().sort({ createdAt: -1 });
+            return res.status(200).json(listings);
+        }
+
+        const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const regex = new RegExp(escaped, "i");
+
+        const listings = await Listing.find({
+            $or: [{ title: regex }, { city: regex }, { landMark: regex }],
+        }).sort({ createdAt: -1 });
+
+        return res.status(200).json(listings);
+    } catch (error) {
+        console.error("Error searching listings:", error);
+        return res.status(500).json({ message: `searchListing error: ${error}` });
+    }
+};
+
 export const findListing = async (req, res) => {
     try {
         const { id } = req.params;
@@ -119,3 +142,22 @@ export const deleteListing = async (req, res) => {
         return res.status(500).json({ message: `deleteListing error: ${error}` });
     }
 };
+
+export const ratingListing = async (req, res) => {
+    try{
+        const {id}= req.params;
+        const { ratings } = req.body;
+        const listing = await Listing.findById(id);
+        if (!listing) {
+            return res.status(400).json({ error: "Listing not found" });
+        }
+        listing.ratings=Number(ratings);
+        await listing.save();
+        return res.status(200).json({ ratings: listing.ratings });
+
+    }
+    catch(error){
+        console.error("Error rating listing:", error);
+        return res.status(500).json({ message: `ratingListing error: ${error}` });
+    }
+}

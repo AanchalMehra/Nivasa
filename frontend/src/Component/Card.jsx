@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
+import { ChevronLeft, ChevronRight, MapPin, Star, User } from 'lucide-react'
 import { UserDataContext } from '../Context/UserContext'
 import { ListingDataContext } from '../Context/ListingContext'
 
@@ -11,7 +11,10 @@ function Card({ listing }) {
   const images = [listing.image1, listing.image2, listing.image3].filter(Boolean)
   const [index, setIndex] = useState(0)
 
+  const isDisabled = listing.isBooked
+
   const handleClick = () => {
+    if (isDisabled) return
     if (userData) {
       handleViewCard(listing._id)
       navigate(`/viewcard/${listing._id}`)
@@ -32,8 +35,10 @@ function Card({ listing }) {
 
   return (
     <div
-      onClick={handleClick}
-      className="w-full rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow bg-white cursor-pointer"
+      onClick={isDisabled ? undefined : handleClick}
+      className={`w-full rounded-2xl overflow-hidden border border-gray-200 shadow-sm bg-white transition-shadow ${
+        isDisabled ? 'cursor-not-allowed opacity-75' : 'cursor-pointer hover:shadow-md'
+      }`}
     >
       <div className="relative w-full h-56 overflow-hidden bg-gray-100">
         <div
@@ -49,6 +54,13 @@ function Card({ listing }) {
             />
           ))}
         </div>
+
+        {listing.isBooked && (
+          <div className="absolute top-2 right-2 flex items-center gap-1 bg-white/90 text-gray-800 text-xs font-semibold rounded-full px-2.5 py-1 shadow">
+            <User className="w-3 h-3" />
+            Booked
+          </div>
+        )}
 
         {images.length > 1 && (
           <>
@@ -84,10 +96,15 @@ function Card({ listing }) {
       <div className="p-4 flex flex-col gap-1.5">
         <div className="flex items-center justify-between gap-2">
           <h3 className="text-sm font-semibold text-gray-900 truncate">{listing.title}</h3>
-          <span className="shrink-0 text-xs font-medium text-orange-500 bg-orange-50 rounded-full px-2 py-0.5">
-            {listing.category}
+          <span className="shrink-0 flex items-center gap-1 text-xs font-medium text-gray-700">
+            <Star className="w-3.5 h-3.5 fill-orange-500 text-orange-500" />
+            {listing.ratings ?? 0}
           </span>
         </div>
+
+        <span className="w-fit text-xs font-medium text-orange-500 bg-orange-50 rounded-full px-2 py-0.5">
+          {listing.category}
+        </span>
 
         <div className="flex items-center gap-1 text-xs text-gray-500">
           <MapPin className="w-3 h-3 shrink-0" />

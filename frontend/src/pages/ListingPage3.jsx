@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, MapPin } from 'lucide-react'
+import { ArrowLeft, MapPin, Star } from 'lucide-react'
 import { toast } from 'react-toastify'
 import { ListingDataContext } from '../Context/ListingContext'
 
@@ -84,6 +84,11 @@ function ListingPage3() {
                 <span className="flex items-center gap-1 text-gray-500">
                   <MapPin className="w-4 h-4" />
                   {landMark}
+                </span>
+                <span className="text-gray-300">•</span>
+                <span className="flex items-center gap-1 text-gray-700">
+                  <Star className="w-4 h-4 fill-orange-500 text-orange-500" />
+                  0
                 </span>
               </div>
               <p className="text-sm text-gray-700 max-w-2xl">{description}</p>

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react'
 import axios from 'axios'
 import { AuthDataContext } from './AuthContext'
+import { UserDataContext } from './UserContext'
 import { useNavigate } from 'react-router-dom'
 
 export const ListingDataContext = createContext()
@@ -8,6 +9,7 @@ export const ListingDataContext = createContext()
 function ListingContext({ children }) {
   const navigate=useNavigate()
   const { serverUrl } = useContext(AuthDataContext)
+  const { getCurrentUserData } = useContext(UserDataContext)
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -23,6 +25,7 @@ function ListingContext({ children }) {
   const [category, setCategory] = useState('')
   const [adding, setAdding] = useState(false)
   const [listingData, setListingData] = useState([])
+  const [searchData, setSearchData] = useState([])
   const [activeCategory, setActiveCategory] = useState(null)
   const [viewCardData, setViewCardData] = useState(null)
 
@@ -37,6 +40,18 @@ function ListingContext({ children }) {
     }
   }
 
+  const handleSearch = async (query) => {
+    try {
+      const result = await axios.get(`${serverUrl}/api/listing/search`, {
+        params: { query },
+        withCredentials: true,
+      })
+      setSearchData(result.data)
+    } catch (error) {
+      console.error('Error searching listings:', error)
+    }
+  }
+
   const handleViewCard = async (id) => {
     try {
       const result = await axios.get(`${serverUrl}/api/listing/findlistingbyid/${id}`, {
@@ -46,6 +61,15 @@ function ListingContext({ children }) {
     } catch (error) {
       console.error('Error fetching listing:', error)
     }
+  }
+
+  const handleRatings = async (id, ratings) => {
+    const result = await axios.post(
+      `${serverUrl}/api/listing/ratings/${id}`,
+      { ratings },
+      { withCredentials: true }
+    )
+    return result.data
   }
 
   const handleAddListing = async () => {
@@ -68,6 +92,7 @@ function ListingContext({ children }) {
       setAdding(false)
       console.log(result)
       navigate('/')
+      await getCurrentUserData()
 
       setTitle('')
       setDescription('')
@@ -105,11 +130,14 @@ function ListingContext({ children }) {
     category,setCategory,
     adding,setAdding,
     listingData,setListingData,
+    searchData,setSearchData,
     activeCategory,setActiveCategory,
     viewCardData,setViewCardData,
     handleAddListing,
     getListing,
+    handleSearch,
     handleViewCard,
+    handleRatings,
   }
 
   return (

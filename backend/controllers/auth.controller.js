@@ -52,7 +52,7 @@ export const login= async(req,res)=>{
             return res.status(400).json({error:"All fields are required"});
         }
 
-        const user=await User.findOne({email}).populate("listing", "title description host image1 image2 image3 rent city landMark category isBooked");
+        const user=await User.findOne({email}).populate("listing", "title description host image1 image2 image3 rent city landMark category isBooked ratings");
         if(!user){
             return res.status(400).json({error:"User does not exist"});
         }
