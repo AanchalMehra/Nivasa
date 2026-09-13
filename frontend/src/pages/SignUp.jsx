@@ -4,9 +4,11 @@ import { ArrowLeft, User, Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { AuthDataContext } from '../Context/AuthContext'
+import { UserDataContext } from '../Context/UserContext'
 
 function SignUp() {
-  const { serverUrl } = useContext(AuthDataContext)
+  const { serverUrl, loading, setLoading } = useContext(AuthDataContext)
+  const { setUserData } = useContext(UserDataContext)
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     username: '',
@@ -14,7 +16,6 @@ function SignUp() {
     password: '',
   })
   const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -40,6 +41,7 @@ function SignUp() {
         { withCredentials: true }
       )
       toast.success(result.data?.message || 'Account created successfully')
+      setUserData(result.data?.user)
       navigate('/')
     } catch (error) {
       if (error.response) {

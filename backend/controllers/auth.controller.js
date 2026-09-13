@@ -32,7 +32,8 @@ export const signUp= async(req,res)=>{
             maxAge:7*24*60*60*1000
         })
 
-        return res.status(201).json({message:"User created successfully",user});
+        const { password: _password, ...userData } = user.toObject();
+        return res.status(201).json({message:"User created successfully",user:userData});
 
 
     }
@@ -51,7 +52,7 @@ export const login= async(req,res)=>{
             return res.status(400).json({error:"All fields are required"});
         }
 
-        const user=await User.findOne({email});
+        const user=await User.findOne({email}).populate("listing", "title description host image1 image2 image3 rent city landMark category isBooked");
         if(!user){
             return res.status(400).json({error:"User does not exist"});
         }
@@ -69,7 +70,9 @@ export const login= async(req,res)=>{
             maxAge:7*24*60*60*1000
         })
 
-        return res.status(200).json({message:"Login successful",user});
+        const { password: _password, ...userData } = user.toObject();
+
+        return res.status(200).json({message:"Login successful",user:userData});
 
     }
     catch(error){
