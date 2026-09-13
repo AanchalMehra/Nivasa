@@ -63,6 +63,10 @@ export const cancelBooking = async (req, res) => {
             return res.status(400).json({ error: "Booking is already cancelled" });
         }
 
+        if (new Date() >= new Date(booking.checkIn)) {
+            return res.status(400).json({ error: "Cannot cancel a booking after the check-in date has started" });
+        }
+
         booking.status = "cancelled";
         await booking.save();
 

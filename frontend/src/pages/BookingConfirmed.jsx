@@ -53,7 +53,7 @@ function BookingConfirmed() {
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-500">Owner</span>
             <span className="font-medium text-gray-900 truncate max-w-[60%]">
-              {bookingData.host?.name || bookingData.host?.email || '—'}
+              {bookingData.host?.email || '—'}
             </span>
           </div>
           <div className="flex items-center justify-between text-sm">

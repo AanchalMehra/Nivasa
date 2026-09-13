@@ -63,6 +63,8 @@ function MyBookings() {
             const listing = b.listing
             if (!listing) return null
 
+            const canCancel = b.status !== 'cancelled' && new Date() < new Date(b.checkIn)
+
             return (
               <div
                 key={b._id}
@@ -113,7 +115,7 @@ function MyBookings() {
                     </div>
                   )}
 
-                  {b.status !== 'cancelled' && (
+                  {b.status !== 'cancelled' && canCancel && (
                     <button
                       type="button"
                       onClick={() => setConfirmId(b._id)}
@@ -122,6 +124,12 @@ function MyBookings() {
                     >
                       {cancelling ? 'Cancelling...' : 'Cancel Booking'}
                     </button>
+                  )}
+
+                  {b.status !== 'cancelled' && !canCancel && (
+                    <p className="mt-2 text-xs text-gray-500 text-center">
+                      Cancellation is no longer available after check-in.
+                    </p>
                   )}
                 </div>
               </div>
